@@ -4,7 +4,7 @@ services:
     image: postgres:13
     environment:
       POSTGRES_DB: test
-      POSTGRES_USER: postgres_user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
       POSTGRES_PORT: 5432
     ports:
