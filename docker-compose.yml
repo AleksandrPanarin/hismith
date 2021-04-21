@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_PORT: 5432
+    ports:
+      - "5432:5432"
+    container_name: postgres
+
+  php-fpm:
+    image: webdevops/php:7.4
+    hostname: php-fpm
+    volumes:
+      - "./:/app"
+    working_dir: "/app"
+    depends_on:
+      - postgres
+    container_name: app
+
+  nginx:
+    image: webdevops/nginx
+    hostname: nginx
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+      WEB_DOCUMENT_INDEX: index.php
+      WEB_PHP_SOCKET: php-fpm:9000
+    ports:
+      - "80:80"
+    volumes:
+      - "./:/app"
+    depends_on:
+      - php-fpm
+    container_name: nginx
