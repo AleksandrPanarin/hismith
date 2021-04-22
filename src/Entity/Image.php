@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Image
 {
+    const ACCEPT_TYPES = [
+        'image/jpeg', 'image/jpg', 'image/png'
+    ];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -80,7 +83,7 @@ class Image
         return $this;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
         return $this->link;
     }

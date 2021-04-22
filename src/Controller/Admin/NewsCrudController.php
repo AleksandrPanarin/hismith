@@ -49,7 +49,7 @@ class NewsCrudController extends AbstractCrudController
                         }
                         return $str;
                     }
-                    return 1;
+                    return '';
                 });
         } else {
             $images

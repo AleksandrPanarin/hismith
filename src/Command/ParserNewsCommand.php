@@ -49,18 +49,7 @@ class ParserNewsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-//        $arg1 = $input->getArgument('arg1');
-//
-//        if ($arg1) {
-//            $io->note(sprintf('You passed an argument: %s', $arg1));
-//        }
-//
-//        if ($input->getOption('option1')) {
-//
-//        }
-
         $response = $this->client->request(Request::METHOD_GET, News::URL_TO_NEWS);
-
         $log = new Log();
         $log->setResponseCode($response->getStatusCode())
             ->setRequestMethod(Request::METHOD_GET)
@@ -103,9 +92,11 @@ class ParserNewsCommand extends Command
     private function generateImagesForNews(News $news, array $imagesData): void
     {
         if (array_key_exists('@url', $imagesData) && array_key_exists('@type', $imagesData)) {
-            $image = new Image();
-            $image->setLink($imagesData['@url'])->setType($imagesData['@type'])->setNews($news);
-            $this->entityManager->persist($image);
+            if (in_array($imagesData['@type'], Image::ACCEPT_TYPES)) {
+                $image = new Image();
+                $image->setLink($imagesData['@url'])->setType($imagesData['@type'])->setNews($news);
+                $this->entityManager->persist($image);
+            }
         } else {
             $this->recursiveImagesDataTraversal($news, $imagesData);
         }
@@ -121,9 +112,11 @@ class ParserNewsCommand extends Command
     {
         foreach ($data as $item) {
             if (array_key_exists('@url', $item) && array_key_exists('@type', $item)) {
-                $image = new Image();
-                $image->setLink($item['@url'])->setType($item['@type'])->setNews($news);
-                $this->entityManager->persist($image);
+                if (in_array($item['@type'], Image::ACCEPT_TYPES)) {
+                    $image = new Image();
+                    $image->setLink($item['@url'])->setType($item['@type'])->setNews($news);
+                    $this->entityManager->persist($image);
+                }
             } else {
                 $this->recursiveImagesDataTraversal($news, $data);
                 return;
@@ -131,32 +124,4 @@ class ParserNewsCommand extends Command
         }
         return;
     }
-
-//    public static function test(array $imageData)
-//    {
-//        $images = [];
-//        if (array_key_exists('@url', $imageData) && array_key_exists('@type', $imageData)) {
-//            $image = new Image();
-//            $image->setLink($imageData['@url'])->setType($imageData['@type']);
-//            $images[] = $image;
-//            return $images;
-//        }
-//        return self::recursiveArr($imageData);
-//    }
-//
-//    private static function recursiveArr(array $data)
-//    {
-//        $images = [];
-//        foreach ($data as $item) {
-//            if (array_key_exists('@url', $item) && array_key_exists('@type', $item)) {
-//                $image = new Image();
-//                $image->setLink($item['@url'])->setType($item['@type']);
-//                $images[] = $image;
-//            } else {
-//                return self::recursiveArr($data);
-//            }
-//        }
-//
-//        return $images;
-//    }
 }
