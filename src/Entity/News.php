@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class News
 {
+    const URL_TO_NEWS = 'http://static.feed.rbc.ru/rbc/logical/footer/news.rss';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

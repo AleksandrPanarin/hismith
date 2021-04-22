@@ -189,6 +189,9 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.2.6"
+    },
     "symfony/http-client-contracts": {
         "version": "v2.4.0"
     },
@@ -241,6 +244,9 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/serializer": {
+        "version": "v5.2.4"
     },
     "symfony/service-contracts": {
         "version": "v2.4.0"
