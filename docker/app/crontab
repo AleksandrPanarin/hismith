@@ -1,0 +1,2 @@
+@reboot root  /usr/local/bin/php /app/bin/console app:parser:news >> /var/log/cron.log 2>&1
+*/10 * * * * root  /usr/local/bin/php /app/bin/console app:parser:news >> /var/log/cron.log 2>&1

@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   postgres:
     image: postgres:13
@@ -11,27 +12,29 @@ services:
       - "5432:5432"
     container_name: postgres
 
-  php-fpm:
-    image: webdevops/php:7.4
-    hostname: php-fpm
+  php7.4:
+    build:
+      context: ./
+      dockerfile: docker/app/Dockerfile
     volumes:
       - "./:/app"
     working_dir: "/app"
+    ports:
+      - "9000:9000"
     depends_on:
       - postgres
-    container_name: app
+    container_name: php7.4
 
   nginx:
-    image: webdevops/nginx
-    hostname: nginx
-    environment:
-      WEB_DOCUMENT_ROOT: /app/public
-      WEB_DOCUMENT_INDEX: index.php
-      WEB_PHP_SOCKET: php-fpm:9000
-    ports:
-      - "80:80"
+    build:
+      context: ./
+      dockerfile: docker/nginx/Dockerfile
+    working_dir: "/app"
     volumes:
       - "./:/app"
     depends_on:
-      - php-fpm
+      - "php7.4"
+      - "postgres"
     container_name: nginx
+    ports:
+      - "80:80"
